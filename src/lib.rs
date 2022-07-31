@@ -1,8 +1,7 @@
 use pyo3::prelude::*;
 
-mod math;
-
 mod list;
+mod math;
 
 #[pyfunction]
 /// int_sum generates the sum of a vector of integers
