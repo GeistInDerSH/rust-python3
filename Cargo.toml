@@ -10,5 +10,9 @@ name = "rpython"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.16.4", features = ["extension-module"] }
+pyo3 = "0.16.4"
 rand = "0.8.5"
+
+[features]
+extension-module = ["pyo3/extension-module"]
+default = ["extension-module"]
