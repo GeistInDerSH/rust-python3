@@ -1,5 +1,6 @@
 use pyo3::prelude::*;
 
+mod grep;
 mod list;
 mod math;
 
@@ -17,6 +18,8 @@ fn rpython(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(math::fib, m)?)?;
     m.add_function(wrap_pyfunction!(list::list_bounded, m)?)?;
     m.add_function(wrap_pyfunction!(list::list, m)?)?;
+    m.add_function(wrap_pyfunction!(grep::grep, m)?)?;
+    m.add_function(wrap_pyfunction!(grep::grep_files, m)?)?;
 
     let parallel_submodule = PyModule::new(_py, "parallel")?;
     parallel_submodule.add_function(wrap_pyfunction!(
