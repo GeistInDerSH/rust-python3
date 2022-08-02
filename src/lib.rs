@@ -13,6 +13,8 @@ fn int_sum(vec: Vec<usize>) -> PyResult<usize> {
 fn rpython(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(int_sum, m)?)?;
     m.add_function(wrap_pyfunction!(math::square_and_multiply, m)?)?;
+    m.add_function(wrap_pyfunction!(math::shortest_accending_subsequence, m)?)?;
+    m.add_function(wrap_pyfunction!(math::fib, m)?)?;
     m.add_function(wrap_pyfunction!(list::list_bounded, m)?)?;
     m.add_function(wrap_pyfunction!(list::list, m)?)?;
 
