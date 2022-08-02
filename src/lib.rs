@@ -13,30 +13,15 @@ fn int_sum(vec: Vec<usize>) -> PyResult<usize> {
 #[pymodule]
 fn rpython(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(int_sum, m)?)?;
-    m.add_function(wrap_pyfunction!(math::square_and_multiply, m)?)?;
-    m.add_function(wrap_pyfunction!(math::shortest_accending_subsequence, m)?)?;
-    m.add_function(wrap_pyfunction!(math::fib, m)?)?;
-    m.add_function(wrap_pyfunction!(list::list_bounded, m)?)?;
-    m.add_function(wrap_pyfunction!(list::list, m)?)?;
-    m.add_function(wrap_pyfunction!(grep::grep, m)?)?;
-    m.add_function(wrap_pyfunction!(grep::grep_files, m)?)?;
 
-    let parallel_submodule = PyModule::new(_py, "parallel")?;
-    parallel_submodule.add_function(wrap_pyfunction!(
-        list::parallel::list_bounded,
-        parallel_submodule
-    )?)?;
-    parallel_submodule.add_function(wrap_pyfunction!(list::parallel::list, parallel_submodule)?)?;
+    let list_submodule = list::register(_py)?;
+    m.add_submodule(list_submodule)?;
 
-    let serial_submodule = PyModule::new(_py, "serial")?;
-    serial_submodule.add_function(wrap_pyfunction!(
-        list::serial::list_bounded,
-        serial_submodule
-    )?)?;
-    serial_submodule.add_function(wrap_pyfunction!(list::serial::list, serial_submodule)?)?;
+    let grep_submodule = grep::register(_py)?;
+    m.add_submodule(grep_submodule)?;
 
-    m.add_submodule(parallel_submodule)?;
-    m.add_submodule(serial_submodule)?;
+    let math_submodule = math::register(_py)?;
+    m.add_submodule(math_submodule)?;
 
     Ok(())
 }

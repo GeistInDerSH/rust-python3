@@ -18,7 +18,7 @@ fn bit_count(n: u64) -> i64 {
 
 #[pyfunction]
 /// Raise the base to the power and take the mod of the number
-pub fn square_and_multiply(base: u64, pow: u64, m: u64) -> PyResult<u64> {
+fn square_and_multiply(base: u64, pow: u64, m: u64) -> PyResult<u64> {
     let mut n = base;
     let bit_pos = bit_count(pow);
 
@@ -32,7 +32,7 @@ pub fn square_and_multiply(base: u64, pow: u64, m: u64) -> PyResult<u64> {
 }
 
 #[pyfunction]
-pub fn shortest_accending_subsequence(seq: Vec<usize>) -> PyResult<Vec<usize>> {
+fn shortest_accending_subsequence(seq: Vec<usize>) -> PyResult<Vec<usize>> {
     let mut sub_seq = Vec::new();
 
     for val in seq {
@@ -45,7 +45,7 @@ pub fn shortest_accending_subsequence(seq: Vec<usize>) -> PyResult<Vec<usize>> {
 }
 
 #[pyfunction]
-pub fn fib(n: usize) -> PyResult<BigUint> {
+fn fib(n: usize) -> PyResult<BigUint> {
     let mut f0: BigUint = Zero::zero();
     let mut f1: BigUint = One::one();
 
@@ -55,4 +55,12 @@ pub fn fib(n: usize) -> PyResult<BigUint> {
     }
 
     Ok(f0)
+}
+
+pub fn register(py: Python<'_>) -> PyResult<&PyModule> {
+    let m = PyModule::new(py, "math")?;
+    m.add_function(wrap_pyfunction!(fib, m)?)?;
+    m.add_function(wrap_pyfunction!(shortest_accending_subsequence, m)?)?;
+    m.add_function(wrap_pyfunction!(square_and_multiply, m)?)?;
+    Ok(m)
 }

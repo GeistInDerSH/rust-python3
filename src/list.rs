@@ -22,3 +22,25 @@ pub fn list(len: usize) -> PyResult<Vec<usize>> {
         parallel::list(len)
     }
 }
+
+pub fn register(py: Python<'_>) -> PyResult<&PyModule> {
+    let m = PyModule::new(py, "list")?;
+
+    m.add_function(wrap_pyfunction!(list_bounded, m)?)?;
+    m.add_function(wrap_pyfunction!(list, m)?)?;
+
+    let parallel_submodule = PyModule::new(py, "parallel")?;
+    parallel_submodule.add_function(wrap_pyfunction!(
+        parallel::list_bounded,
+        parallel_submodule
+    )?)?;
+    parallel_submodule.add_function(wrap_pyfunction!(parallel::list, parallel_submodule)?)?;
+    m.add_submodule(parallel_submodule)?;
+
+    let serial_submodule = PyModule::new(py, "serial")?;
+    serial_submodule.add_function(wrap_pyfunction!(serial::list_bounded, serial_submodule)?)?;
+    serial_submodule.add_function(wrap_pyfunction!(serial::list, serial_submodule)?)?;
+    m.add_submodule(serial_submodule)?;
+
+    Ok(m)
+}
