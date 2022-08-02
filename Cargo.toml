@@ -10,7 +10,9 @@ name = "rpython"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = "0.16.4"
+num-bigint = "0.4.2"
+num-traits = "0.2.14"
+pyo3 = {version = "0.16.4", features = ["num-bigint"]}
 rand = "0.8.5"
 
 [features]
