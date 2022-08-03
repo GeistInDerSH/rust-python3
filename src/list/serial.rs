@@ -1,7 +1,7 @@
 use pyo3::prelude::*;
 use rand::Rng;
 
-#[pyfunction]
+#[pyfunction(bound = 256)]
 pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
     let mut rng = rand::thread_rng();
 

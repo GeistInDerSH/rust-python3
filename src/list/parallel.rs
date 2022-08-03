@@ -4,7 +4,7 @@ use rand::Rng;
 use std::sync::{mpsc, Arc, Mutex};
 use std::thread;
 
-#[pyfunction]
+#[pyfunction(bound = 256)]
 pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
     let core_count = 12;
     let cap = len / core_count;
