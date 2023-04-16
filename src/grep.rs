@@ -18,14 +18,12 @@ pub fn grep(regex: String, file_name: String) -> PyResult<Vec<String>> {
 
 #[pyfunction]
 pub fn grep_files(regex: String, files: Vec<String>) -> PyResult<Vec<String>> {
-    let mut v = Vec::new();
-
-    for file in files {
-        let mut temp = grep(regex.clone(), file).unwrap();
-        v.append(&mut temp);
-    }
-
-    Ok(v)
+    Ok(files
+        .iter()
+        .map(|file| grep(regex.clone(), file.to_string()))
+        .filter(|r| r.is_ok())
+        .flat_map(|r| r.unwrap())
+        .collect())
 }
 
 pub fn register(py: Python<'_>) -> PyResult<&PyModule> {
