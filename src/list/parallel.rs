@@ -3,10 +3,11 @@ use rand::Rng;
 
 use std::sync::{mpsc, Arc, Mutex};
 use std::thread;
+use crate::list::helper;
 
 #[pyfunction(bound = 256)]
 pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
-    let core_count = 12;
+    let core_count = helper::available_cores();
     let cap = len / core_count;
 
     let (sender, receiver) = mpsc::channel();
@@ -44,13 +45,13 @@ pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
 
 #[pyfunction]
 pub fn list(len: usize) -> PyResult<Vec<usize>> {
-    let core_count = 12;
+    let core_count = helper::available_cores();
     let cap = len / core_count;
 
     let (sender, receiver) = mpsc::channel();
     let sender = Arc::new(Mutex::new(sender));
     let mut workers = Vec::with_capacity(core_count);
-    for _ in 0..12 {
+    for _ in 0..core_count {
         let sender = Arc::clone(&sender);
 
         workers.push(thread::spawn(move || {
