@@ -60,7 +60,7 @@ fn fib(n: usize) -> PyResult<BigUint> {
 pub fn register(py: Python<'_>) -> PyResult<&PyModule> {
     let m = PyModule::new(py, "math")?;
     m.add_function(wrap_pyfunction!(fib, m)?)?;
-    m.add_function(wrap_pyfunction!(shortest_accending_subsequence, m)?)?;
+    m.add_function(wrap_pyfunction!(shortest_ascending_subsequence, m)?)?;
     m.add_function(wrap_pyfunction!(square_and_multiply, m)?)?;
     Ok(m)
 }
