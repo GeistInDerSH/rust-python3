@@ -11,16 +11,16 @@ fn int_sum(vec: Vec<usize>) -> PyResult<usize> {
 }
 
 #[pymodule]
-fn rpython(_py: Python<'_>, m: &PyModule) -> PyResult<()> {
+fn rpython(py: Python<'_>, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(int_sum, m)?)?;
 
-    let list_submodule = list::register(_py)?;
+    let list_submodule = list::register(py)?;
     m.add_submodule(list_submodule)?;
 
-    let grep_submodule = grep::register(_py)?;
+    let grep_submodule = grep::register(py)?;
     m.add_submodule(grep_submodule)?;
 
-    let math_submodule = math::register(_py)?;
+    let math_submodule = math::register(py)?;
     m.add_submodule(math_submodule)?;
 
     Ok(())
