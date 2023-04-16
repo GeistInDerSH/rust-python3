@@ -1,3 +1,4 @@
+use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{prelude::*, BufReader};
 
@@ -22,6 +23,8 @@ pub fn grep(regex: String, file_name: String) -> PyResult<Vec<String>> {
 #[pyfunction]
 pub fn grep_files(regex: String, files: Vec<String>) -> PyResult<Vec<String>> {
     Ok(files
+        .into_iter()
+        .collect::<HashSet<String>>()
         .iter()
         .map(|file| grep(regex.clone(), file.to_string()))
         .filter(|r| r.is_ok())
