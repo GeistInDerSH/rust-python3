@@ -32,7 +32,7 @@ fn square_and_multiply(base: u64, pow: u64, m: u64) -> PyResult<u64> {
 }
 
 #[pyfunction]
-fn shortest_accending_subsequence(seq: Vec<usize>) -> PyResult<Vec<usize>> {
+fn shortest_ascending_subsequence(seq: Vec<usize>) -> PyResult<Vec<usize>> {
     let mut sub_seq = Vec::new();
 
     for val in seq {
