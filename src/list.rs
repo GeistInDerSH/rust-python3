@@ -1,12 +1,12 @@
 use pyo3::prelude::*;
 
+mod helper;
 pub mod parallel;
 pub mod serial;
-mod helper;
 
 #[pyfunction]
 /// Generate a list of n random numbers with each number bounded by some number
-pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
+fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
     if len < helper::available_cores() * 1_000 {
         serial::list_bounded(len, bound)
     } else {
@@ -16,7 +16,7 @@ pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
 
 #[pyfunction]
 /// Generate a list of n random numbers
-pub fn list(len: usize) -> PyResult<Vec<usize>> {
+fn list(len: usize) -> PyResult<Vec<usize>> {
     if len < helper::available_cores() * 1_000 {
         serial::list(len)
     } else {

@@ -6,7 +6,7 @@ use pyo3::{exceptions::PyUnicodeError, prelude::*};
 use regex::Regex;
 
 #[pyfunction]
-pub fn grep(regex: String, file_name: String) -> PyResult<Vec<String>> {
+fn grep(regex: String, file_name: String) -> PyResult<Vec<String>> {
     let file = File::open(file_name)?;
     let regex = match Regex::new(&regex) {
         Ok(r) => Ok(r),
@@ -21,7 +21,7 @@ pub fn grep(regex: String, file_name: String) -> PyResult<Vec<String>> {
 }
 
 #[pyfunction]
-pub fn grep_files(regex: String, files: Vec<String>) -> PyResult<Vec<String>> {
+fn grep_files(regex: String, files: Vec<String>) -> PyResult<Vec<String>> {
     Ok(files
         .into_iter()
         .collect::<HashSet<String>>()
@@ -33,10 +33,7 @@ pub fn grep_files(regex: String, files: Vec<String>) -> PyResult<Vec<String>> {
 }
 
 #[pyfunction]
-pub fn grep_files_mapped(
-    regex: String,
-    files: Vec<String>,
-) -> PyResult<HashMap<String, Vec<String>>> {
+fn grep_files_mapped(regex: String, files: Vec<String>) -> PyResult<HashMap<String, Vec<String>>> {
     Ok(files
         .into_iter()
         .collect::<HashSet<String>>() // Get the unique values
