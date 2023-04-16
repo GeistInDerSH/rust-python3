@@ -1,9 +1,9 @@
 use pyo3::prelude::*;
 use rand::Rng;
 
+use crate::list::helper;
 use std::sync::{mpsc, Arc, Mutex};
 use std::thread;
-use crate::list::helper;
 
 #[pyfunction(bound = 256)]
 pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
@@ -13,7 +13,7 @@ pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
     let (sender, receiver) = mpsc::channel();
     let sender = Arc::new(Mutex::new(sender));
     let mut workers = Vec::with_capacity(core_count);
-    for _ in 0..12 {
+    for _ in 0..core_count {
         let sender = Arc::clone(&sender);
 
         workers.push(thread::spawn(move || {
