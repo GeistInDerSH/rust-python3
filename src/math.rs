@@ -1,6 +1,6 @@
 use pyo3::prelude::*;
 
-use num_bigint::BigUint;
+use num_bigint::{BigUint, ToBigUint};
 use num_traits::{One, Zero};
 
 /// Count the number of bits in an integer
@@ -57,9 +57,30 @@ fn fib(n: usize) -> PyResult<BigUint> {
     Ok(f0)
 }
 
+#[pyfunction]
+pub fn fast_fib(n: usize) -> BigUint {
+    match n {
+        0 => Zero::zero(),
+        1 => One::one(),
+        _ => {
+            let two = 2.to_biguint().unwrap();
+            let k = n / 2;
+            let f1 = fast_fib(k);
+            let f2 = fast_fib(k - 1);
+
+            match n % 4 {
+                0 | 2 => &f1 * (&f1 + two * f2),
+                1 => (&two * &f1 + &f2) * (&two * f1 - f2) + two,
+                _ => (&two * &f1 + &f2) * (&two * f1 - f2) - two,
+            }
+        }
+    }
+}
+
 pub fn register(py: Python<'_>) -> PyResult<&PyModule> {
     let m = PyModule::new(py, "math")?;
     m.add_function(wrap_pyfunction!(fib, m)?)?;
+    m.add_function(wrap_pyfunction!(fast_fib, m)?)?;
     m.add_function(wrap_pyfunction!(shortest_ascending_subsequence, m)?)?;
     m.add_function(wrap_pyfunction!(square_and_multiply, m)?)?;
     Ok(m)
