@@ -25,8 +25,8 @@ fn grep_files(regex: String, files: Vec<String>) -> PyResult<Vec<String>> {
     Ok(files
         .into_iter()
         .collect::<HashSet<String>>()
-        .iter()
-        .map(|file| grep(regex.clone(), file.to_string()))
+        .into_iter()
+        .map(|file| grep(regex.clone(), file))
         .filter(|r| r.is_ok())
         .flat_map(|r| r.unwrap())
         .collect())
@@ -37,8 +37,8 @@ fn grep_files_mapped(regex: String, files: Vec<String>) -> PyResult<HashMap<Stri
     Ok(files
         .into_iter()
         .collect::<HashSet<String>>() // Get the unique values
-        .iter()
-        .map(|file| (file.clone(), grep(regex.clone(), file.to_string())))
+        .into_iter()
+        .map(|file| (file.clone(), grep(regex.clone(), file)))
         .filter(|(_, r)| r.is_ok())
         .map(|(v, r)| (v, r.unwrap()))
         .collect::<HashMap<String, Vec<String>>>())
