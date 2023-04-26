@@ -2,6 +2,7 @@ use pyo3::prelude::*;
 use rand::Rng;
 
 use crate::list::helper;
+use pyo3::exceptions::{PyChildProcessError, PyException};
 use std::sync::{mpsc, Arc, Mutex};
 use std::thread;
 
@@ -25,7 +26,13 @@ pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
                 *item = rng.gen_range(0..bound);
             }
 
-            sender.lock().unwrap().send(lv).unwrap();
+            return match sender.lock() {
+                Ok(mtx) => match mtx.send(lv) {
+                    Ok(_) => Ok(()),
+                    Err(err) => Err(PyException::new_err(err.to_string())),
+                },
+                Err(err) => Err(PyException::new_err(err.to_string())),
+            };
         }));
     }
 
@@ -37,7 +44,10 @@ pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
     }
 
     for _ in 0..core_count {
-        let mut rv = receiver.recv().unwrap();
+        let mut rv = match receiver.recv() {
+            Ok(v) => Ok(v),
+            Err(err) => Err(PyChildProcessError::new_err(err.to_string())),
+        }?;
         v.append(&mut rv);
     }
 
@@ -64,7 +74,13 @@ pub fn list(len: usize) -> PyResult<Vec<usize>> {
                 *item = rng.gen();
             }
 
-            sender.lock().unwrap().send(lv).unwrap();
+            return match sender.lock() {
+                Ok(mtx) => match mtx.send(lv) {
+                    Ok(_) => Ok(()),
+                    Err(err) => Err(PyException::new_err(err.to_string())),
+                },
+                Err(err) => Err(PyException::new_err(err.to_string())),
+            };
         }));
     }
 
@@ -76,7 +92,10 @@ pub fn list(len: usize) -> PyResult<Vec<usize>> {
     }
 
     for _ in 0..core_count {
-        let mut rv = receiver.recv().unwrap();
+        let mut rv = match receiver.recv() {
+            Ok(v) => Ok(v),
+            Err(err) => Err(PyChildProcessError::new_err(err.to_string())),
+        }?;
         v.append(&mut rv);
     }
 

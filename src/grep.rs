@@ -15,7 +15,7 @@ fn grep(regex: String, file_name: String) -> PyResult<Vec<String>> {
 
     Ok(BufReader::new(file)
         .lines()
-        .map(|line| line.unwrap())
+        .map(|line| line.unwrap_or("".to_string()))
         .filter(|line| regex.find(line).is_some())
         .collect())
 }
