@@ -11,6 +11,5 @@ pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
 #[pyfunction]
 /// Generate a list of random numbers, with no bound on the random numbers
 pub fn list(len: usize) -> PyResult<Vec<usize>> {
-    let mut rng = rand::thread_rng();
-    Ok((0..len).map(|_| rng.gen()).collect())
+    list_bounded(len, usize::MAX)
 }
