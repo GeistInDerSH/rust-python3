@@ -6,6 +6,7 @@ use std::sync::{mpsc, Arc, Mutex};
 use std::thread;
 
 #[pyfunction(bound = 256)]
+/// Generate a list of random numbers, with a set bound for the random numbers
 pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
     let core_count = helper::available_cores();
     let cap = len / core_count;
@@ -44,6 +45,7 @@ pub fn list_bounded(len: usize, bound: usize) -> PyResult<Vec<usize>> {
 }
 
 #[pyfunction]
+/// Generate a list of random numbers, with no bound on the random numbers
 pub fn list(len: usize) -> PyResult<Vec<usize>> {
     let core_count = helper::available_cores();
     let cap = len / core_count;

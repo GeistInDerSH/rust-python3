@@ -45,6 +45,7 @@ fn shortest_ascending_subsequence(seq: Vec<usize>) -> PyResult<Vec<usize>> {
 }
 
 #[pyfunction]
+/// A basic version of the Fibonacci algorithm that runs in linear time O(n)
 fn fib(n: usize) -> PyResult<BigUint> {
     let mut f0: BigUint = Zero::zero();
     let mut f1: BigUint = One::one();
@@ -58,6 +59,7 @@ fn fib(n: usize) -> PyResult<BigUint> {
 }
 
 #[pyfunction]
+/// A faster version of the [fib](fib) function that runs in ln^2(n)
 pub fn fast_fib(n: usize) -> BigUint {
     match n {
         0 => Zero::zero(),
